@@ -10,19 +10,19 @@ from modules.tasks.models.task_types import (
 class TaskFactory:
 
     @staticmethod
-    def create_task(task_type, title, description, **kwargs):
+    def create_task(task_type, title, description, due_date, **kwargs):
 
         if task_type == TaskType.Bug:
-            return BugTask(title, description, **kwargs)
+            return BugTask(title, description, due_date, **kwargs)
 
         elif task_type == TaskType.Feature:
-            return FeatureTask(title, description, **kwargs)
+            return FeatureTask(title, description, due_date, **kwargs)
 
         elif task_type == TaskType.Task:
-            return SimpleTask(title, description, **kwargs)
+            return SimpleTask(title, description, due_date, **kwargs)
 
         elif task_type == TaskType.Improvement:
-            return ImprovementTask(title, description, **kwargs)
+            return ImprovementTask(title, description, due_date, **kwargs)
 
         else:
             raise ValueError("Invalid Task Type")

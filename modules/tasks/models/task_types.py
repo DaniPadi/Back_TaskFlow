@@ -5,8 +5,8 @@ from modules.tasks.models.enum import TaskType
 # Bug Task
 class BugTask(Task):
 
-    def __init__(self, title, description, severity="medium", **kwargs):
-        super().__init__(title, description, **kwargs)
+    def __init__(self, title, description, due_date=None, severity="medium", **kwargs):
+        super().__init__(title, description, due_date=due_date, **kwargs)
         self.severity = severity
 
     def get_type(self):
@@ -19,15 +19,16 @@ class BugTask(Task):
             "description": self.description,
             "status": self.status.value,
             "priority": self.priority.value,
-            "severity": self.severity
+            "severity": self.severity,
+            "due_date": self.due_date.isoformat() if self.due_date else None
         }
 
 
 # Feature Task
 class FeatureTask(Task):
 
-    def __init__(self, title, description, module="general", **kwargs):
-        super().__init__(title, description, **kwargs)
+    def __init__(self, title, description, due_date=None, module="general", **kwargs):
+        super().__init__(title, description, due_date=due_date, **kwargs)
         self.module = module
 
     def get_type(self):
@@ -40,7 +41,8 @@ class FeatureTask(Task):
             "description": self.description,
             "status": self.status.value,
             "priority": self.priority.value,
-            "module": self.module
+            "module": self.module,
+            "due_date": self.due_date.isoformat() if self.due_date else None
         }
 
     def clone(self):
@@ -65,15 +67,16 @@ class SimpleTask(Task):
             "title": self.title,
             "description": self.description,
             "status": self.status.value,
-            "priority": self.priority.value
+            "priority": self.priority.value,
+            "due_date": self.due_date.isoformat() if self.due_date else None
         }
 
 
 # Improvement Task
 class ImprovementTask(Task):
 
-    def __init__(self, title, description, impact="medium", **kwargs):
-        super().__init__(title, description, **kwargs)
+    def __init__(self, title, description, due_date=None, impact="medium", **kwargs):
+        super().__init__(title, description, due_date=due_date, **kwargs)
         self.impact = impact
 
     def get_type(self):
@@ -86,5 +89,6 @@ class ImprovementTask(Task):
             "description": self.description,
             "status": self.status.value,
             "priority": self.priority.value,
-            "impact": self.impact
+            "impact": self.impact,
+            "due_date": self.due_date.isoformat() if self.due_date else None
         }

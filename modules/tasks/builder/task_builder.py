@@ -13,6 +13,7 @@ class TaskBuilder:
         self._description = None
         self._status = TaskStatus.To_Do
         self._priority = PriorityTask.Medium
+        self._due_date = None
         self._extra_fields = {}
 
     def set_type(self, task_type: TaskType):
@@ -35,6 +36,10 @@ class TaskBuilder:
         self._priority = priority
         return self
 
+    def set_due_date(self, due_date):
+        self._due_date = due_date
+        return self
+
     def add_extra(self, key, value):
         self._extra_fields[key] = value
         return self
@@ -53,6 +58,7 @@ class TaskBuilder:
             self._description,
             status=self._status,
             priority=self._priority,
+            due_date=self._due_date,
             **self._extra_fields
         )
 
