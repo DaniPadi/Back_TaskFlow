@@ -1,11 +1,6 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-import os
-
-print("URL:", os.getenv("SUPABASE_URL"))
-print("KEY:", os.getenv("SUPABASE_KEY"))
-
 from flask import Flask
 from flask_restx import Api
 

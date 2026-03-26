@@ -12,17 +12,6 @@ class BugTask(Task):
     def get_type(self):
         return TaskType.Bug
 
-    def to_dict(self):
-        return {
-            "type": self.get_type().value,
-            "title": self.title,
-            "description": self.description,
-            "status": self.status.value,
-            "priority": self.priority.value,
-            "severity": self.severity,
-            "due_date": self.due_date.isoformat() if self.due_date else None
-        }
-
 
 # Feature Task
 class FeatureTask(Task):
@@ -34,42 +23,12 @@ class FeatureTask(Task):
     def get_type(self):
         return TaskType.Feature
 
-    def to_dict(self):
-        return {
-            "type": self.get_type().value,
-            "title": self.title,
-            "description": self.description,
-            "status": self.status.value,
-            "priority": self.priority.value,
-            "module": self.module,
-            "due_date": self.due_date.isoformat() if self.due_date else None
-        }
-
-    def clone(self):
-        return FeatureTask(
-            self.title,
-            self.description,
-            module=self.module,
-            status=self.status,
-            priority=self.priority
-        )
-
 
 # Normal Task
 class SimpleTask(Task):
 
     def get_type(self):
         return TaskType.Task
-
-    def to_dict(self):
-        return {
-            "type": self.get_type().value,
-            "title": self.title,
-            "description": self.description,
-            "status": self.status.value,
-            "priority": self.priority.value,
-            "due_date": self.due_date.isoformat() if self.due_date else None
-        }
 
 
 # Improvement Task
@@ -81,14 +40,3 @@ class ImprovementTask(Task):
 
     def get_type(self):
         return TaskType.Improvement
-
-    def to_dict(self):
-        return {
-            "type": self.get_type().value,
-            "title": self.title,
-            "description": self.description,
-            "status": self.status.value,
-            "priority": self.priority.value,
-            "impact": self.impact,
-            "due_date": self.due_date.isoformat() if self.due_date else None
-        }

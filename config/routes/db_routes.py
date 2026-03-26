@@ -7,7 +7,7 @@ health_ns = Namespace('health', description='Health check')
 class HealthCheck(Resource):
     def get(self):
         try:
-            client = SupabaseClient.get_client()
+            client = SupabaseClient().get_client()
 
             response = client.rpc("health_check").execute()
 

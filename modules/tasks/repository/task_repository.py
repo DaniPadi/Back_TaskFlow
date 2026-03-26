@@ -2,7 +2,7 @@ from config.db import SupabaseClient
 
 class TaskRepository:
     def __init__(self):
-        self.client = SupabaseClient().getClient()
+        self.client = SupabaseClient().get_client()
         self.table = "tasks"
 
     def get_all(self):
@@ -13,7 +13,7 @@ class TaskRepository:
     def get_by_id(self, task_id):
         response = self.client.table(self.table)\
         .select("*")\
-        .eq("id", task_id)\
+        .eq("task_id", task_id)\
         .single()\
         .execute()
 
@@ -29,7 +29,7 @@ class TaskRepository:
     def update(self, task_id, data):
         response = self.client.table(self.table)\
             .update(data)\
-            .eq("id", task_id)\
+            .eq("task_id", task_id)\
             .execute()
         
         if not response.data:
@@ -40,7 +40,7 @@ class TaskRepository:
     def delete(self, task_id):
         response = self.client.table(self.table)\
             .delete()\
-            .eq("id", task_id)\
+            .eq("task_id", task_id)\
             .execute()
         
         if not response.data:

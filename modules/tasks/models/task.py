@@ -23,9 +23,16 @@ class Task(ABC):
     def get_type(self):
         pass
 
-    @abstractmethod
     def to_dict(self):
-        pass
+        return {
+            "task_id": self.id,
+            "column_id": self.column_id,
+            "title": self.title,
+            "description": self.description,
+            "priority": self.priority if self.priority else None,
+            "type": self.get_type().value,
+            "due_date": self.due_date.isoformat() if self.due_date else None,
+        }
 
     def clone(self):
         return copy.deepcopy(self)

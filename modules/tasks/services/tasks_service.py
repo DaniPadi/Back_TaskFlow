@@ -1,66 +1,45 @@
 from datetime import datetime
 
-from modules.tasks.builder.task_builder import TaskBuilder
+from modules.tasks.factory.task_factory import TaskFactory
 from modules.tasks.models.Itask_service import ITaskService
-from modules.tasks.models.enum import TaskType, TaskStatus, PriorityTask
 
 
 
 class TaskService(ITaskService):
 
-    def __init__(self):
-        self.tasks = {}
+    def __init__(self, repository):
+        self.repository = repository
         self.current_id = 1
+
+    def get_all_tasks(self):
+        return self.repository.get_all()
 
     def create_task(self, data):
 
-        builder = TaskBuilder()
+        task = TaskFactory.from_dict(data)
 
-        task = (
-            builder
-            .set_type(TaskType(data["task_type"]))
-            .set_title(data["title"])
-            .set_description(data["description"])
-            .set_due_date(datetime.fromisoformat(data["due_date"]))
-        )
-
-        if "status" in data:
-            task.set_status(TaskStatus(data["status"]))
-
-        if "priority" in data:
-            task.set_priority(PriorityTask(data["priority"]))
-
-        if "extra" in data:
-            for key, value in data["extra"].items():
-                task.add_extra(key, value)
-
-        task = task.build()
-
-        # asignar ID
-        task.id = self.current_id
-
-        self.tasks[self.current_id] = task
+        task.id = self.current_id 
         self.current_id += 1
 
-        return task.to_dict()
+        return self.repository.create(task.to_dict())
 
     def get_task(self, task_id):
-        return self.tasks.get(task_id)
+        data = self.repository.get_by_id(task_id)
+        task = TaskFactory.from_dict(data)
+        return task
 
     def update_task(self, task_id, data):
         task = self.get_task(task_id)
         if not task:
             return None
 
-        task.update_task(
-            data
-        )
+        self.repository.update(task_id, data)
 
-        task.history.append("Task updated")
-        return task.to_dict()
+        
+        return self.get_task(task_id)
 
     def delete_task(self, task_id):
-        return self.tasks.pop(task_id, None)
+        return self.repository.delete(task_id)
 
     def move_task(self, task_id, column_id):
         task = self.get_task(task_id)
@@ -102,13 +81,10 @@ class TaskService(ITaskService):
         task = self.get_task(task_id)
         if not task:
             return None
+        
+        task.add_attachment(file)
 
-        task.attachments.append({
-            "file": file,
-            "uploaded_at": datetime.now().isoformat()
-        })
-
-        return task.to_dict()
+        return task
 
     def clone_task(self, task_id):
         task = self.get_task(task_id)
@@ -117,8 +93,10 @@ class TaskService(ITaskService):
 
         new_task = task.clone()
 
-        self.tasks[self.current_id] = new_task
+        new_task.id = self.current_id
         self.current_id += 1
+
+        self.repository.create(new_task.to_dict())
 
         return new_task.to_dict()
 
