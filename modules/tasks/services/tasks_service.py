@@ -9,17 +9,14 @@ class TaskService(ITaskService):
 
     def __init__(self, repository):
         self.repository = repository
-        self.current_id = 1
 
     def get_all_tasks(self):
         return self.repository.get_all()
 
     def create_task(self, data):
 
+        data["task_id"] = self.repository.get_last_id() + 1
         task = TaskFactory.from_dict(data)
-
-        task.id = self.current_id 
-        self.current_id += 1
 
         return self.repository.create(task.to_dict())
 
@@ -33,10 +30,9 @@ class TaskService(ITaskService):
         if not task:
             return None
 
-        self.repository.update(task_id, data)
+        task = self.repository.update(task_id, data)
 
-        
-        return self.get_task(task_id)
+        return task
 
     def delete_task(self, task_id):
         return self.repository.delete(task_id)
@@ -93,9 +89,8 @@ class TaskService(ITaskService):
 
         new_task = task.clone()
 
-        new_task.id = self.current_id
-        self.current_id += 1
-
+        new_task.task_id = self.repository.get_last_id() + 1
+        
         self.repository.create(new_task.to_dict())
 
         return new_task.to_dict()

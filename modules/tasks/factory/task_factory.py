@@ -10,28 +10,29 @@ from datetime import datetime
 
 
 class TaskFactory:
+    _creators = {
+        TaskType.Bug: BugTask,
+        TaskType.Feature: FeatureTask,
+        TaskType.Task: SimpleTask,
+        TaskType.Improvement: ImprovementTask,
+    }
 
     @staticmethod
-    def create_task(task_type, title, description, due_date, **kwargs):
+    def create_task(task_id, task_type, title, description, due_date,**kwargs):
+        task_type = TaskType(task_type)
+        factory = TaskFactory._creators.get(task_type)
+        if not factory:
+            raise ValueError(f"No creator defined for task type {task_type}")
+        
+        task = factory(task_id, title, description, due_date, **kwargs)
 
-        if task_type == TaskType.Bug:
-            return BugTask(title, description, due_date, **kwargs)
-
-        elif task_type == TaskType.Feature:
-            return FeatureTask(title, description, due_date, **kwargs)
-
-        elif task_type == TaskType.Task:
-            return SimpleTask(title, description, due_date, **kwargs)
-
-        elif task_type == TaskType.Improvement:
-            return ImprovementTask(title, description, due_date, **kwargs)
-
-        else:
-            raise ValueError("Invalid Task Type")
+        return task
+        
     
     # TaskFactory
     @staticmethod
     def from_dict(data):
+        task_id = data["task_id"]
         task_type = TaskType(data["type"])
         title = data["title"]
         description = data.get("description")
@@ -41,6 +42,7 @@ class TaskFactory:
         extra = data.get("extra", {})
 
         task = TaskFactory.create_task(
+            task_id,
             task_type,
             title,
             description,

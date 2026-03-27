@@ -38,7 +38,7 @@ class Task(Resource):
         task = service.get_task(id)
         if not task:
             return {"error": "Not found"}, 404
-        return task.to_dict()
+        return task.task_id
 
     @task_ns.expect(task_model)
     def put(self, id):
@@ -46,7 +46,7 @@ class Task(Resource):
         task = service.update_task(id, data)
         if not task:
             return {"error": "Not found"}, 404
-        return task.to_dict()
+        return task
 
     def delete(self, id):
         task = service.delete_task(id)

@@ -5,8 +5,8 @@ from modules.tasks.models.enum import TaskType
 # Bug Task
 class BugTask(Task):
 
-    def __init__(self, title, description, due_date=None, severity="medium", **kwargs):
-        super().__init__(title, description, due_date=due_date, **kwargs)
+    def __init__(self, task_id, title, description, due_date=None, severity="medium", **kwargs):
+        super().__init__(task_id, title, description, due_date=due_date, **kwargs)
         self.severity = severity
 
     def get_type(self):
@@ -16,8 +16,8 @@ class BugTask(Task):
 # Feature Task
 class FeatureTask(Task):
 
-    def __init__(self, title, description, due_date=None, module="general", **kwargs):
-        super().__init__(title, description, due_date=due_date, **kwargs)
+    def __init__(self, task_id, title, description, due_date=None, module="general", **kwargs):
+        super().__init__(task_id, title, description, due_date=due_date, **kwargs)
         self.module = module
 
     def get_type(self):
@@ -34,8 +34,8 @@ class SimpleTask(Task):
 # Improvement Task
 class ImprovementTask(Task):
 
-    def __init__(self, title, description, due_date=None, impact="medium", **kwargs):
-        super().__init__(title, description, due_date=due_date, **kwargs)
+    def __init__(self, task_id, title, description, due_date=None, impact="medium", **kwargs):
+        super().__init__(task_id, title, description, due_date=due_date, **kwargs)
         self.impact = impact
 
     def get_type(self):

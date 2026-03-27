@@ -6,10 +6,11 @@ from modules.tasks.models.enum import TaskType, TaskStatus, PriorityTask
 
 class Task(ABC):
 
-    def __init__(self, title, description, status: TaskStatus, priority: PriorityTask, due_date=None, column_id=None, **kwargs):
-        self.id = None
+    def __init__(self, task_id, title, description, status: TaskStatus, priority: PriorityTask, due_date=None, column_id=None, **kwargs):
+        self.task_id = task_id
         self.title = title
         self.description = description
+        self.parent_task = None
         self.status = status
         self.priority = priority
         self.due_date = due_date
@@ -25,7 +26,7 @@ class Task(ABC):
 
     def to_dict(self):
         return {
-            "task_id": self.id,
+            "task_id": self.task_id,
             "column_id": self.column_id,
             "title": self.title,
             "description": self.description,

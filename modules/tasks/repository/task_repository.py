@@ -5,6 +5,12 @@ class TaskRepository:
         self.client = SupabaseClient().get_client()
         self.table = "tasks"
 
+
+    def get_last_id(self):
+        response = self.client.table(self.table).select("task_id").order("task_id", desc=True).limit(1).execute()
+        last_id = response.data[0]
+        return last_id["task_id"]
+
     def get_all(self):
         response = self.client.table(self.table).select("*").execute()
 
