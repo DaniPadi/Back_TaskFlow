@@ -28,6 +28,7 @@ class Task(ABC):
         return {
             "task_id": self.task_id,
             "column_id": self.column_id,
+            "parent_task": self.parent_task,
             "title": self.title,
             "description": self.description,
             "priority": self.priority if self.priority else None,

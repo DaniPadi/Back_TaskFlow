@@ -14,8 +14,9 @@ class TaskService(ITaskService):
         return self.repository.get_all()
 
     def create_task(self, data):
-
-        data["task_id"] = self.repository.get_last_id() + 1
+        
+        last_id = self.repository.get_last_id()
+        data["task_id"] = last_id + 1
         task = TaskFactory.from_dict(data)
 
         return self.repository.create(task.to_dict())
